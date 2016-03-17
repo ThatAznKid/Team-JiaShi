@@ -34,6 +34,7 @@ public class DLList implements List { //your List interface must be in same dir
 	    throw new IndexOutOfBoundsException();
 
 	String retVal;
+	if (index < size()/2){
 	DLLNode tmp = _head; //create alias to head
 
 	//walk to desired node
@@ -41,7 +42,16 @@ public class DLList implements List { //your List interface must be in same dir
 	    tmp = tmp.getNext();
 
 	//check target node's cargo hold
-	retVal = tmp.getCargo();
+	retVal = tmp.getCargo(); }
+	else {
+	DLLNode tmp = _tail; //create alias to tail
+
+	//walk to desired node
+	for( int i=0; i > index; i-- )
+	    tmp = tmp.getPre();
+
+	//check target node's cargo hold
+	retVal = tmp.getCargo(); }
 	return retVal;
     } 
 
@@ -74,8 +84,11 @@ public class DLList implements List { //your List interface must be in same dir
 
 
     //insert a node containing newVal at position index
+    //add-at-index
+    
     public void add( int index, String newVal ) {
 
+	//check if possible
 	if ( index < 0 || index >= size() )
 	    throw new IndexOutOfBoundsException();
 
@@ -84,7 +97,8 @@ public class DLList implements List { //your List interface must be in same dir
 	//if index==0, insert node before head node
 	if ( index == 0 ) 
 	    add( newVal );
-	else {
+	    //if index is in the front half
+	else if (index < size()/2) {
 	    DLLNode tmp = _head; //create alias to head
 
 	    //walk to node before desired node
@@ -98,12 +112,27 @@ public class DLList implements List { //your List interface must be in same dir
 	    //increment size attribute
 	    _size++;
 	}
+	//if index is in second half
+	else {
+		DLLNode tmp = _tail; //create alias to tail
+
+	    //walk to node before desired node
+	    for( int i=0; i > index-1; i-- )
+		tmp = tmp.getNext();
+
+	    //insert new node
+	    newNode.setPre( tmp.getPre() );
+	    tmp.setPre( newNode );
+
+	    //increment size attribute
+	    _size++;}
     }
 
 
     //remove node at pos index, return its cargo
     public String remove( int index ) {
 
+	//check if index possible
 	if ( index < 0 || index >= size() )
 	    throw new IndexOutOfBoundsException();
 
@@ -118,7 +147,8 @@ public class DLList implements List { //your List interface must be in same dir
 	    //remove target node
 	    _head = _head.getNext();	    
 	}
-	else {
+	//if index is in front half
+	else if (index < size()/2) {
 	    //walk to node before desired node
 	    for( int i=0; i < index-1; i++ )
 		tmp = tmp.getNext();
@@ -128,6 +158,18 @@ public class DLList implements List { //your List interface must be in same dir
 
 	    //remove target node
 	    tmp.setNext( tmp.getNext().getNext() );
+	} 
+	else {
+		tmp = _tail;
+		//walk to node before desired node
+	    for( int i=0; i > index-1; i-- )
+		tmp = tmp.getPre();
+
+	    //check target node's cargo hold
+	    retVal = tmp.getPre().getCargo();
+
+	    //remove target node
+	    tmp.setPre( tmp.getPre().getPre() );
 	}
 
 	//decrement size attribute
