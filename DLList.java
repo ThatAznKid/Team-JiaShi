@@ -9,11 +9,13 @@ public class DLList implements List { //your List interface must be in same dir
     //instance vars
     private DLLNode _head;
     private int _size;
+    private DLLNode _tail;
 
     // constructor -- initializes instance vars
     public DLList( ) {
 	_head = null; //at birth, a list has no elements
 	_size = 0;
+	_tail = null;
     }
 
 
